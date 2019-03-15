@@ -12,7 +12,7 @@
       <code v-html="highlightedCode"></code>
     </pre>
     <Executions :canExecute="canExecute" @onUpdating="scrollToBottom" @onFinish="canOpen = true"/>
-    <invitation :canOpen="canOpen" @sendBarrage="onAfterSending"/>
+    <Invitation :canOpen="canOpen" @sendBarrage="onAfterSending"/>
     <Barrage :wish="wish" :canStart="canStart"/>
   </div>
 </template>
@@ -61,22 +61,22 @@
     },
     methods: {
       scrollToBottom() {
-        // 保持页面一直滚到最下面
+        // Keep the page rolling all the way down to the bottom
         this.$refs.editor.scrollTop = 100000
       },
-      // 代码输入
+      // Code input
       progressivelyTyping() {
         return new Promise((resolve) => {
           let count = 0, typingCount = 0, typing
-          // 写代码每一帧的函数
+          // Write code for each frame function
           let step = () => {
             let randomNumber = Math.round(Math.random() * 6)
-            // 摸你打字的随机速度
+            // Touch the random speed of your typing
             if(count % 2 === 0 && randomNumber % 4 === 0){
               this.currentCode = this.code.substring(0, typingCount)
               typingCount++
             }
-            // 大约每 24 帧光标闪动一次
+            // The cursor flashes approximately every 24 frames
             if(count % 24 === 0){
               this.isCursorVisible = this.isCursorVisible === 0 ? 1 : 0
             }
@@ -92,7 +92,7 @@
           typing = requestAnimationFrame(step)
         })
       },
-      // 发送弹幕之后
+      // After sending the bullet
       onAfterSending(wish) {
         this.wish = wish
         this.canOpen = false

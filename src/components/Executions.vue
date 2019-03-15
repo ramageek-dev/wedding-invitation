@@ -1,19 +1,19 @@
 <template>
   <div class="executions">
-    <!--执行命令-->
+    <!--Excuting an order-->
     <p class="code" v-for="(execution, index) in executions" :key="index" v-show="execution.visible">
       <span class="addon">~</span>
       [<span class="time">{{ execution.time }}</span>]
       <span class="task">{{ execution.name }}</span>
       <span class="duration" v-if="execution.duration!==undefined">{{ execution.duration }} ms</span>
     </p>
-    <!--进度条-->
+    <!--Progress bar-->
     <p class="code" v-show="isProcessed">
       <span class="addon">~</span>
       {{ progressBarText }}
       <span class="percentage">{{ percentage }}%</span>
     </p>
-    <!--执行命令-->
+    <!--Excuting an order-->
     <p class="code" v-show="endExecution.visible">
       <span class="addon">~</span>
       [<span class="time">{{ endExecution.time }}</span>]
@@ -34,7 +34,7 @@
         isFinished: false,
         progressBarText: '--------------------------',
         endExecution: {
-          name:'打开中...',
+          name:'Open...',
           time: '',
           visible: false
         }

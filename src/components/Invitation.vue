@@ -4,32 +4,56 @@
       <div class="invitation-cover">
         <div class="cover-content" :class="{'invitation-up':isOpening}">
           <div class="content-inside">
-            <img class="content-inside-photo" src="../images/photo.jpg">
-            <p>我们结婚啦！</p>
-            <p><b>Jun & undefined</b></p>
-            <p>时间：invalid date value</p>
-            <p>地点：<b>location can not be found</b></p>
-            <input
-              class="content-inside-input"
-              placeholder="轻触写下祝福，按回车发送" 
-              @keyup.enter="sendBarrage"
-              @focus="isFocused = true"
-              @blur="isFocused = false, hasEntered = false"
-              v-model="wish"
-              ref="wishInput"
-            >
-            <p v-if="!wish && isFocused && hasEntered">请输入祝福哦</p>
+            <img class="content-inside-photo" src="../images/foto.jpg">
+            <p>Wedding Announcement!</p>
+            <br>
+            <p>Hi! We are very happy to announce to you that we will getting married soon. So please feel free for you to come to our wedding that will be hold on:</p>
+            <br>
+            <p><b>Mufattichatus Shobairin &amp; Qisthi Ramadhani</b></p>
+            <br>
+            <p>Start：10:00 AM</p>
+            <p>Date：Saturday, April 13th 2019</p>
+            <p>Place：<b>Mufattichatus's home</b></p>
+            <br>
+            <p>We'll happy to see you around!</p>
+            <div>
+              <input
+                class="content-inside-input"
+                placeholder="Name"
+                @focus="isFocused = true"
+                @blur="isFocused = false, hasEntered = false"
+                v-model="name"
+                style="width: 25%;border-right: 1px solid #f7debb;"
+                required
+              >
+              <input
+                class="content-inside-input"
+                placeholder="Wanna say something?"
+                @keyup.enter="sendBarrage"
+                @focus="isFocused = true"
+                @blur="isFocused = false, hasEntered = false"
+                v-model="wish"
+                ref="wishInput"
+                style="width: 72%;margin-left: 3%;border-right: 1px solid #f7debb;"
+                required
+              >
+              <button class="content-inside-input" v-on:click="sendBarrage" style="border: 1px solid #f7debb; width: 20%">Send</button>
+              <button class="content-inside-input" v-on:click="closeInvitation" style="margin-left: 5%;border: 1px solid #f7debb; width: 20%">Close</button>
+            </div>
+            <!-- <p v-if="!wish && isFocused && hasEntered">Want pray for blessing?</p>` -->
           </div>
         </div>
         <div class="cover-inside-left" :class="{'opening':isOpening}"></div>
         <div class="cover-inside-right" :class="{'opening':isOpening}"></div>
-        <img class="cover-inside-seal" src="../images/seal.png" @click="openInvitation" :class="{'invitation-flight':isOpening}">
+        <img class="cover-inside-seal" src="../images/bash.png" @click="openInvitation" :class="{'invitation-flight':isOpening}">
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import firebase from '../mock/firebase'
+
 export default {
   props: ['canOpen'],
   data() {
@@ -37,21 +61,32 @@ export default {
       isOpening: false,
       wish: '',
       isFocused: false,
-      hasEntered: false
+      hasEntered: false,
+      name: '',
     }
   },
   methods: {
-    // 打开邀请函
     openInvitation(){
       this.isOpening = true
     },
-    // 发送弹幕
+    closeInvitation(){
+      this.isOpening = false
+    },
     sendBarrage(){
       this.$nextTick(() => {
         this.hasEntered = true
+
         if (!this.wish) {
           return
         }
+
+        const wish = {
+          name: this.name,
+          value: this.wish
+        }
+
+        firebase.database.ref('wish').push(wish)
+
         this.isOpening = false
         this.$refs.wishInput.blur()
         setTimeout(() => {
